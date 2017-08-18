@@ -21,8 +21,10 @@ export default class Recorder extends Component {
   }
 
   componentDidMount () {
+    let supportsMediaDevices = !!navigator.mediaDevices.getUserMedia
     navigator.getUserMedia =
       navigator.mediaDevices.getUserMedia ||
+      navigator.getUserMedia ||
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia ||
       navigator.webkitGetUserMedia
@@ -70,11 +72,13 @@ export default class Recorder extends Component {
         if (gotStream) gotStream(stream)
       }
 
-      // Always treat navigator.getUserMedia as an asynchronous action even
-      // if `navigator.mediaDevices.getUserMedia` is not available
-      Promise.resolve(navigator.getUserMedia(constraints))
-        .then(stream => onSuccess(stream))
-        .catch(err => onErr(err))
+      if (supportsMediaDevices) {
+        Promise.resolve(navigator.getUserMedia(constraints))
+          .then(stream => onSuccess(stream))
+          .catch(err => onErr(err))
+      } else {
+        navigator.getUserMedia(constraints, onSuccess, onError)
+      }
     } else {
       console.warn('Audio recording APIs not supported by this browser')
       const { onMissingAPIs } = this.props
