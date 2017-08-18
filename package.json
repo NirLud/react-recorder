@@ -11,12 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/agrasley/react-recorder.git"
   },
-  "keywords": [
-    "react",
-    "react-component",
-    "audio",
-    "MediaRecorder"
-  ],
+  "keywords": ["react", "react-component", "audio", "MediaRecorder"],
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
   },
@@ -33,5 +28,8 @@
     "babel-preset-react": "^6.11.1",
     "react": "^15.2.1",
     "rimraf": "^2.5.3"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.10"
   }
 }

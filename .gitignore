@@ -1,3 +1,6 @@
+# Custom files
+.tern-port
+
 # Logs
 logs
 *.log

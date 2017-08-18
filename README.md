@@ -1,6 +1,8 @@
 # react-recorder
 A react component that records audio using the MediaRecorder API
 
+This is a slightly tweaked version that prioritizes the usage of the [navigator.mediaDevices.getUserMedia()](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia) API instead of the deprecated navigator.getUserMedia() (but defaults to it if it the former isn't available).
+
 ## Installation
 
 ```
@@ -45,7 +47,7 @@ The `onStop` prop is the only required prop for the Recorder component. `onStop`
 
 ### onMissingAPIs
 
-The `onMissingAPIs` prop is a function called when the browser fails to implement either the `navigator.getUserMedia` or `MediaRecorder` APIs required by the component. The function is passed the values for `navigator.getUserMedia` and `MediaRecorder` as arguments in case the developer wants to implement individualized error messages for the various APIs. If `onMissingAPIs` is left undefined, the default behavior is to call `window.alert` to notify the user to use either Chrome or Firefox.
+The `onMissingAPIs` prop is a function called when the browser fails to implement either the `navigator.mediaDevices.getUserMedia`, `navigator.getUserMedia` or `MediaRecorder` APIs required by the component. The function is passed the values for `navigator.getUserMedia` and `MediaRecorder` as arguments in case the developer wants to implement individualized error messages for the various APIs. If `onMissingAPIs` is left undefined, the default behavior is to call `window.alert` to notify the user to use either Chrome or Firefox.
 
 ### onError
 
@@ -74,6 +76,10 @@ The options passed to the `Blob` constructor, including specifying the MIMEType 
 ### mediaOpts
 
 The options passed to the `MediaRecorder` constructor. Defaults to `{}`.
+
+### constraints
+
+The constraints object passed to the `navigator.mediaDevices.getUserMedia` function. Defaults to `{ audio: true }`.
 
 ### command
 

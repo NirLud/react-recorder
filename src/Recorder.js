@@ -1,34 +1,45 @@
 'use strict'
 
-import React, { PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-const Recorder = React.createClass({
+export default class Recorder extends Component {
   start () {
     this.mediaRecorder.start()
-  },
+  }
 
   stop () {
     this.mediaRecorder.stop()
-  },
+  }
 
   pause () {
     this.mediaRecorder.pause()
-  },
+  }
 
   resume () {
     this.mediaRecorder.resume()
-  },
+  }
 
   componentDidMount () {
-    navigator.getUserMedia = (navigator.getUserMedia ||
-                              navigator.mozGetUserMedia ||
-                              navigator.msGetUserMedia ||
-                              navigator.webkitGetUserMedia)
+    navigator.getUserMedia =
+      navigator.mediaDevices.getUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia ||
+      navigator.webkitGetUserMedia
 
     if (navigator.getUserMedia && window.MediaRecorder) {
-      const constraints = {audio: true}
+      const { constraints } = this.props
       this.chunks = []
-      const { blobOpts, onStop, onError, mediaOpts, onPause, onResume, onStart, gotStream } = this.props
+      const {
+        blobOpts,
+        onStop,
+        onError,
+        mediaOpts,
+        onPause,
+        onResume,
+        onStart,
+        gotStream
+      } = this.props
 
       const onErr = err => {
         console.warn(err)
@@ -43,7 +54,10 @@ const Recorder = React.createClass({
         }
 
         this.mediaRecorder.onstop = e => {
-          const blob = new window.Blob(this.chunks, blobOpts || {type: 'audio/wav'})
+          const blob = new window.Blob(
+            this.chunks,
+            blobOpts || { type: 'audio/wav' }
+          )
           this.chunks = []
           onStop(blob)
         }
@@ -56,45 +70,59 @@ const Recorder = React.createClass({
         if (gotStream) gotStream(stream)
       }
 
-      navigator.getUserMedia(constraints, onSuccess, onErr)
+      // Always treat navigator.getUserMedia as an asynchronous action even
+      // if `navigator.mediaDevices.getUserMedia` is not available
+      Promise.resolve(navigator.getUserMedia(constraints))
+        .then(stream => onSuccess(stream))
+        .catch(err => onErr(err))
     } else {
       console.warn('Audio recording APIs not supported by this browser')
       const { onMissingAPIs } = this.props
       if (onMissingAPIs) {
         onMissingAPIs(navigator.getUserMedia, window.MediaRecorder)
       } else {
-        window.alert('Your browser doesn\'t support native microphone recording. For best results, we recommend using Google Chrome or Mozilla Firefox to use this site.')
+        window.alert(
+          "Your browser doesn't support native microphone recording. For best results, we recommend using Google Chrome or Mozilla Firefox to use this site."
+        )
       }
     }
-  },
+  }
 
   componentDidUpdate (prevProps) {
-    if (this.props.command && this.props.command !== 'none' && prevProps.command !== this.props.command) {
+    if (
+      this.props.command &&
+      this.props.command !== 'none' &&
+      prevProps.command !== this.props.command
+    ) {
       this[this.props.command]()
     }
-  },
+  }
 
   componentWillUnmount () {
     if (this.props.onUnmount) this.props.onUnmount(this.stream)
-  },
+  }
 
   render () {
     return false
-  },
-
-  propTypes: {
-    command: PropTypes.oneOf(['start', 'stop', 'pause', 'resume', 'none']),
-    onStop: PropTypes.func.isRequired,
-    onMissingAPIs: PropTypes.func,
-    onError: PropTypes.func,
-    onPause: PropTypes.func,
-    onStart: PropTypes.func,
-    onResume: PropTypes.func,
-    onUnmount: PropTypes.func,
-    gotStream: PropTypes.func,
-    blobOpts: PropTypes.object,
-    mediaOpts: PropTypes.object
   }
-})
+}
 
-export default Recorder
+Recorder.propTypes = {
+  className: PropTypes.string,
+  command: PropTypes.oneOf(['start', 'stop', 'pause', 'resume', 'none']),
+  constraints: PropTypes.object,
+  onStop: PropTypes.func.isRequired,
+  onMissingAPIs: PropTypes.func,
+  onError: PropTypes.func,
+  onPause: PropTypes.func,
+  onStart: PropTypes.func,
+  onResume: PropTypes.func,
+  onUnmount: PropTypes.func,
+  gotStream: PropTypes.func,
+  blobOpts: PropTypes.object,
+  mediaOpts: PropTypes.object
+}
+
+Recorder.defaultProps = {
+  constraints: { audio: true }
+}
