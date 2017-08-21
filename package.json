@@ -1,5 +1,5 @@
 {
-  "name": "react-recorder",
+  "name": "react-recorder-3s",
   "version": "1.0.0",
   "description": "A react component that records audio using the MediaRecorder API",
   "main": "lib/index.js",
@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agrasley/react-recorder.git"
+    "url": "git+https://github.com/alliende/react-recorder.git"
   },
   "keywords": ["react", "react-component", "audio", "MediaRecorder"],
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
   },
-  "author": "Alex Grasley",
+  "author": "Luis León",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/agrasley/react-recorder/issues"
+    "url": "https://github.com/alliende/react-recorder/issues"
   },
-  "homepage": "https://github.com/agrasley/react-recorder#readme",
+  "homepage": "https://github.com/alliende/react-recorder#readme",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
