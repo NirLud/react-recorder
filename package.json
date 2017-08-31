@@ -1,6 +1,6 @@
 {
   "name": "react-recorder-3s",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A react component that records audio using the MediaRecorder API",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,12 @@
     "type": "git",
     "url": "git+https://github.com/alliende/react-recorder.git"
   },
-  "keywords": ["react", "react-component", "audio", "MediaRecorder"],
+  "keywords": [
+    "react",
+    "react-component",
+    "audio",
+    "MediaRecorder"
+  ],
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
   },

@@ -23,11 +23,11 @@ export default class Recorder extends Component {
   componentDidMount () {
     let supportsMediaDevices = !!navigator.mediaDevices.getUserMedia
     navigator.getUserMedia =
-      navigator.mediaDevices.getUserMedia ||
+      (navigator.mediaDevices.getUserMedia ||
       navigator.getUserMedia ||
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia ||
-      navigator.webkitGetUserMedia
+      navigator.webkitGetUserMedia).bind(navigator)
 
     if (navigator.getUserMedia && window.MediaRecorder) {
       const { constraints } = this.props
