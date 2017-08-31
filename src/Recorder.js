@@ -73,7 +73,7 @@ export default class Recorder extends Component {
       }
 
       if (supportsMediaDevices) {
-        Promise.resolve(getUserMedia(constraints))
+        Promise.resolve(navigator.mediaDevices.getUserMedia(constraints))
           .then(stream => onSuccess(stream))
           .catch(err => onErr(err))
       } else {
