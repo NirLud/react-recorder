@@ -22,14 +22,14 @@ export default class Recorder extends Component {
 
   componentDidMount () {
     let supportsMediaDevices = !!navigator.mediaDevices.getUserMedia
-    navigator.getUserMedia =
-      (navigator.mediaDevices.getUserMedia ||
+    const getUserMedia =
+      navigator.mediaDevices.getUserMedia ||
       navigator.getUserMedia ||
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia ||
-      navigator.webkitGetUserMedia).bind(navigator)
+      navigator.webkitGetUserMedia
 
-    if (navigator.getUserMedia && window.MediaRecorder) {
+    if (getUserMedia && window.MediaRecorder) {
       const { constraints } = this.props
       this.chunks = []
       const {
@@ -73,7 +73,7 @@ export default class Recorder extends Component {
       }
 
       if (supportsMediaDevices) {
-        Promise.resolve(navigator.getUserMedia(constraints))
+        Promise.resolve(getUserMedia(constraints))
           .then(stream => onSuccess(stream))
           .catch(err => onErr(err))
       } else {
